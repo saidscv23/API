@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     EditText edNum1, edNum2;
     Button btprocesar;
     TextView tvresultado;
-String Respuesta;
+    String Respuesta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,43 +40,47 @@ String Respuesta;
         });
 
     }
-        private void ConsumirApi () {
+    private void ConsumirApi () {
 
-String pro="https://ejemplo2apimovil20240128220859.azurewebsites.net/api/Operaciones?a=4&b=7";
-OkHttpClient cliente=new OkHttpClient();
+        String pro = "https://ejemplo2apimovil20240128220859.azurewebsites.net/api/Operaciones?a=" + edNum1.getText() + "&b=" + edNum2.getText();
+        OkHttpClient cliente=new OkHttpClient();
 
-            Request get=new Request.Builder().url(pro).build();
+        Request get=new Request.Builder().url(pro).build();
 
 
-            cliente.newCall(get).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+        cliente.newCall(get).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try{
+
+                    ResponseBody responseBody=response.body();
+                    if(!response.isSuccessful()){
+                        throw new IOException("Respuesta inesperada"+response);
+
+                    }
+                    Respuesta=responseBody.string();
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvresultado.setText(Respuesta);
+                        }
+                    });
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-try{
-
-    ResponseBody responseBody=response.body();
- if(response.isSuccessful()){
-     throw new IOException("Respuesta inesperada"+response);
-
- }
- Respuesta=responseBody.string();
-
-}catch (Exception e){
-
-}
 
 
-
-                }
-            });
-
-        }
-
+            }
+        });
 
     }
 
 
+}
