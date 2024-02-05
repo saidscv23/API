@@ -36,19 +36,19 @@ public class Proyecto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proyecto);
 
-        // Inicialización de vistas
+
         txtCedula = findViewById(R.id.txtingreso);
         ingresosTextView = findViewById(R.id.ingresos);
         btnConsultar = findViewById(R.id.button);
 
-        // Asociar acción al botón
+
         btnConsultar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Obtener el número de cédula ingresado
+
                 String cedula = txtCedula.getText().toString().trim();
-                // Realizar la consulta al servidor con la cédula ingresada
-                new ConsultarRegistroTask().execute("http://192.168.101.10/WS/webapi.php?op=tabla&ced=" + cedula);
+
+                new ConsultarRegistroTask().execute("http://10.10.18.90/WS/webapi.php?op=tabla&ced=" + cedula);
             }
         });
     }
@@ -77,10 +77,10 @@ public class Proyecto extends AppCompatActivity {
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
 
-            // Parsear el JSON y formatear los datos
+
             StringBuilder formattedResult = new StringBuilder();
             try {
-                JSONArray jsonArray = new JSONArray(resultado); // Suponiendo que los registros están en un arreglo JSON
+                JSONArray jsonArray = new JSONArray(resultado);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String nombreCompletoPaciente = jsonObject.getString("Nombre_Completo_Paciente");
@@ -99,11 +99,11 @@ public class Proyecto extends AppCompatActivity {
                             "Fecha de Registro: " + fechaRegistro + "\n\n";
                     formattedResult.append(registroFormateado);
                 }
-                // Mostrar el resultado formateado en el TextView
+
                 ingresosTextView.setText(formattedResult.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
-                // Manejar el error de parseo JSON según sea necesario
+
             }
         }
     }

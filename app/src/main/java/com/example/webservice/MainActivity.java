@@ -59,18 +59,24 @@ public class MainActivity extends AppCompatActivity {
                 try{
 
                     ResponseBody responseBody=response.body();
-                    if(!response.isSuccessful()){
+                    if(response.isSuccessful()){
+
+
+
+                        Respuesta = responseBody.string();
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvresultado.setText(Respuesta);
+                            }
+                        });
+                    }else{
                         throw new IOException("Respuesta inesperada"+response);
 
-                    }
-                    Respuesta=responseBody.string();
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tvresultado.setText(Respuesta);
-                        }
-                    });
 
+
+
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
